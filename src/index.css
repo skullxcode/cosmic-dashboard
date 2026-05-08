@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import 'leaflet/dist/leaflet.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-space-900 text-white overflow-x-hidden;
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
+.glass-panel {
+  @apply bg-space-card backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
+}
+
+.glass-panel-hover {
+  @apply hover:border-neon-blue/50 hover:shadow-[0_0_15px_rgba(0,243,255,0.2)] transition-all duration-300;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-neon-blue to-neon-purple;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0f19;
+}
+::-webkit-scrollbar-thumb {
+  background: #bc13fe;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00f3ff;
+}
+
+/* Leaflet dark theme override */
+.leaflet-container {
+  background: #0b0f19 !important;
+  border-radius: 1rem;
+}
+.dark-map-tiles {
+  filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
+@keyframes radar-sweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.radar-sweep {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  margin-top: -100px;
+  margin-left: -100px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 243, 255, 0.2);
+  pointer-events: none;
+  z-index: 400;
+  box-shadow: inset 0 0 40px rgba(0, 243, 255, 0.1);
+}
+
+.radar-sweep::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  background: conic-gradient(from 0deg, transparent 70%, rgba(0, 243, 255, 0.4) 100%);
+  transform-origin: 0 0;
+  animation: radar-sweep 2s linear infinite;
+  pointer-events: none;
+}
+
+.crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 399;
+}
+.crosshair::before, .crosshair::after {
+  content: '';
+  position: absolute;
+  background: rgba(188, 19, 254, 0.2);
+}
+.crosshair::before {
+  top: 0; bottom: 0; left: 50%; width: 1px;
+}
+.crosshair::after {
+  left: 0; right: 0; top: 50%; height: 1px;
+}
+
