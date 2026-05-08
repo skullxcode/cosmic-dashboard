@@ -13,9 +13,9 @@ export const useISSData = () => {
 
   const fetchISSData = useCallback(async () => {
     try {
-      const response = await axios.get('http://api.open-notify.org/iss-now.json');
-      const { latitude, longitude } = response.data.iss_position;
-      const timestamp = response.data.timestamp * 1000;
+      const response = await axios.get('https://api.wheretheiss.at/v1/satellites/25544');
+      const { latitude, longitude, timestamp: ts, velocity } = response.data;
+      const timestamp = ts * 1000;
       
       const newPos = { 
         lat: parseFloat(latitude), 
@@ -32,24 +32,8 @@ export const useISSData = () => {
       setCurrentPosition(newPos);
       setTotalTracked(prev => prev + 1);
       
-      if (lastFetchTime.current && currentPosition) {
-        const currentSpeed = calculateSpeed(
-          currentPosition.lat, 
-          currentPosition.lng, 
-          currentPosition.timestamp,
-          newPos.lat, 
-          newPos.lng, 
-          newPos.timestamp
-        );
-        // ISS speed is typically around 27,600 km/h, sanity check
-        if (currentSpeed > 0 && currentSpeed < 50000) {
-          setSpeed(currentSpeed);
-        } else if (currentSpeed > 50000) {
-           setSpeed(27600); // fallback to approx average if reading is weird
-        }
-      } else {
-        setSpeed(27580); // Init approx speed
-      }
+      // WhereTheISS API provides exact velocity in km/h directly!
+      setSpeed(velocity || 27600);
 
       lastFetchTime.current = timestamp;
       setLoading(false);

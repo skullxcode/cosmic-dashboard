@@ -14,6 +14,6 @@ export const fetchNews = async () => {
 };
 
 export const fetchAstros = async () => {
-  const response = await axios.get('http://api.open-notify.org/astros.json');
+  const response = await axios.get('https://api.allorigins.win/raw?url=http://api.open-notify.org/astros.json');
   return response.data;
 };
